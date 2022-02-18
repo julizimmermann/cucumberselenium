@@ -10,3 +10,9 @@ Feature: InQuisitive Website
     When I click on the sandwich menu
     And I click on blogs
     Then The page header should be "BLOGS"
+
+  Scenario: This Test Should Fail
+    Given inquisitive.nl is open
+    When I click on the sandwich menu
+    And I click on blogs
+    Then The page header should be "InQuisitive"

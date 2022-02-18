@@ -1,16 +1,14 @@
 package cucumberselenium;
 
 import cucumberselenium.helpers.WebDriverFactory;
+import io.cucumber.java.Scenario;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.cucumber.java.Before;
 import io.cucumber.java.After;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -58,8 +56,8 @@ public class StepDefinitions {
     }
 
     @Then("The page header should be {string}")
-    public void thePageHeaderShouldBe(String arg0) {
-        assertTrue(driver.findElement(By.xpath("//h2[text()='BLOGS']")).isDisplayed());
+    public void thePageHeaderShouldBe(String header) {
+        assertTrue(driver.findElements(By.xpath("//h2[text()='" + header + "']")).size() != 0);
     }
 
     @Then("The page title should start with {string}")
@@ -68,7 +66,12 @@ public class StepDefinitions {
     }
 
     @After()
-    public void closeBrowser() {
+    public void closeBrowser(Scenario scenario) {
+        if (scenario.isFailed()) {
+            byte[] screenshot = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            scenario.attach(screenshot, "image/png", "name");
+        }
+
         driver.quit();
     }
 
